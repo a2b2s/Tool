@@ -1,0 +1,13 @@
+age isTypeOfInteger;            FTTTTTT
+age > 0;                        -FTTTTT
+age < 150;                      --FTTTT
+biologicalStage = ADOLESCENCE;  ---FFTT
+age < adolescenceLB;            ---TFFT
+biologicalStage = ADULT;        ---TT--
+age > adultLB;                  ---FTTF
+------------Actions------------
+A00: Err00;                     1000000
+A01: Err01;                     0100000
+A02: Err02;                     0010000
+A03: Err03;                     0001010
+A1: Calculate;                  0000101

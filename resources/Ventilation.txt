@@ -1,0 +1,7 @@
+Button Pressed?;      TTF
+Ventilation OFF?;     TF-
+Ventilation ON?;      FT-
+------------Actions------------
+Start ventilation;    100
+Stop ventilation;     010
+No action;            001
