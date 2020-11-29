@@ -98,7 +98,7 @@ public class OrderedBinaryDecisionDiagram{
                 System.out.println(terminalNode + " does not exist.");
         }
         else
-            System.out.println("OBDD " + name + " does not have terminal nodes.");
+            System.out.println("MTBDD " + name + " does not have terminal nodes.");
     }
     public void deleteTerminalNode(int index){
         if (!terminalNodes.isEmpty() && index < terminalNodes.size()){
