@@ -1,9 +1,11 @@
 package MTBDD;
 
+import java.util.List;
+
 public class BuilderMTBDD {
 
     private MTBDD mtbdd;
-    private NonTerminalNode currentNode;
+    private Node currentNode;
 
     public BuilderMTBDD(){
 
@@ -12,7 +14,7 @@ public class BuilderMTBDD {
         this.mtbdd = mtbdd;
     }
 
-    public void addNonterminalNode(NonTerminalNode newNode, Boolean edge){
+    public void addNonterminalNode(Node newNode, Boolean edge){
         if (mtbdd.getRoot() == null) {
             mtbdd.setRoot(newNode);
             currentNode = mtbdd.getRoot();
@@ -30,38 +32,34 @@ public class BuilderMTBDD {
             currentNode = newNode;
         }
     }
-    public void addTerminalNode(TerminalNode terminalNode, Boolean edge){
-        mtbdd.getTerminalNodes().add(terminalNode);
-        if (edge) {
-            currentNode.setRightChild(terminalNode);
-            terminalNode.getParents().add(currentNode);
-            terminalNode.getEdges().add(true);
-        } else {
-            currentNode.setLeftChild(terminalNode);
-            terminalNode.getParents().add(currentNode);
-            terminalNode.getEdges().add(false);
-        }
-    }
+    public void addTerminalNode(Node terminalNode, Boolean edge){
+        if (mtbdd.getTerminalNodes().containsKey(terminalNode)){
+            if (edge)
+                currentNode.setRightChild(terminalNode);
+            else
+                currentNode.setLeftChild(terminalNode);
 
-    public void addNode(Node node, Boolean edge){
-        if (node instanceof NonTerminalNode)
-            addNonterminalNode((NonTerminalNode) node, edge);
-        else if (node instanceof TerminalNode)
-            addTerminalNode((TerminalNode) node, edge);
+            mtbdd.getTerminalNodes().get(terminalNode).add(currentNode);
+        }else {
+            if (edge)
+                currentNode.setRightChild(terminalNode);
+            else
+                currentNode.setLeftChild(terminalNode);
+            mtbdd.getTerminalNodes().put(terminalNode, List.of(currentNode));
+        }
     }
 
     public MTBDD getMTBDD(){
         return mtbdd;
     }
-    public NonTerminalNode getCurrentNode(){
+    public Node getCurrentNode(){
         return currentNode;
     }
 
     public void setMTBDD(MTBDD mtbdd){
         this.mtbdd = mtbdd;
     }
-    public void setCurrentNode(NonTerminalNode currentNode){
+    public void setCurrentNode(Node currentNode){
         this.currentNode = currentNode;
     }
-
 }
