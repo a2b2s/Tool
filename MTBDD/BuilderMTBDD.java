@@ -1,11 +1,9 @@
 package MTBDD;
 
-import java.util.List;
-
 public class BuilderMTBDD {
 
     private MTBDD mtbdd;
-    private Node currentNode;
+    private NonTerminalNode currentNode;
 
     public BuilderMTBDD(){
 
@@ -14,51 +12,55 @@ public class BuilderMTBDD {
         this.mtbdd = mtbdd;
     }
 
-    public void addNode(Node newNode, Boolean edge){
+    public void addNonterminalNode(NonTerminalNode newNode, Boolean edge){
         if (mtbdd.getRoot() == null) {
             mtbdd.setRoot(newNode);
             currentNode = mtbdd.getRoot();
         } else{
-            establishConnection(currentNode, newNode, edge);
+            if (edge){
+                currentNode.setRightChild(newNode);
+                newNode.setParent(currentNode);
+                newNode.setIncomingEdge(true);
+            }
+            else {
+                currentNode.setLeftChild(newNode);
+                newNode.setParent(currentNode);
+                newNode.setIncomingEdge(false);
+            }
             currentNode = newNode;
         }
     }
-    public void addNodes(List<Node> nodes, List<Boolean> edges){
-        for (int i = 0; i < nodes.size(); i++)
-            addNode(nodes.get(i), edges.get(i));
-    }
-    public void addTerminalNode(Node terminalNode, Boolean edge){
+    public void addTerminalNode(TerminalNode terminalNode, Boolean edge){
         mtbdd.getTerminalNodes().add(terminalNode);
         if (edge) {
             currentNode.setRightChild(terminalNode);
+            terminalNode.getParents().add(currentNode);
+            terminalNode.getEdges().add(true);
         } else {
             currentNode.setLeftChild(terminalNode);
+            terminalNode.getParents().add(currentNode);
+            terminalNode.getEdges().add(false);
         }
     }
 
-    public void establishConnection(Node parent, Node child, Boolean edge){
-        if (edge) {
-            parent.setRightChild(child);
-            child.setParent(parent);
-            child.setIncomingEdge(true);
-        } else{
-            parent.setLeftChild(child);
-            child.setParent(parent);
-            child.setIncomingEdge(false);
-        }
+    public void addNode(Node node, Boolean edge){
+        if (node instanceof NonTerminalNode)
+            addNonterminalNode((NonTerminalNode) node, edge);
+        else if (node instanceof TerminalNode)
+            addTerminalNode((TerminalNode) node, edge);
     }
 
     public MTBDD getMTBDD(){
         return mtbdd;
     }
-    public Node getCurrentNode(){
+    public NonTerminalNode getCurrentNode(){
         return currentNode;
     }
 
     public void setMTBDD(MTBDD mtbdd){
         this.mtbdd = mtbdd;
     }
-    public void setCurrentNode(Node currentNode){
+    public void setCurrentNode(NonTerminalNode currentNode){
         this.currentNode = currentNode;
     }
 

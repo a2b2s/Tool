@@ -6,34 +6,34 @@ import java.util.Set;
 public class MTBDD {
 
     private String name;
-    private Node root;
-    private Set<Node> terminalNodes;
+    private NonTerminalNode root;
+    private Set<TerminalNode> terminalNodes;
 
     public MTBDD(){
-        terminalNodes = new HashSet<Node>();
+        terminalNodes = new HashSet<TerminalNode>();
     }
     public MTBDD(String name){
         this.name = name;
-        terminalNodes = new HashSet<Node>();
+        terminalNodes = new HashSet<TerminalNode>();
     }
 
     public String getName() {
         return name;
     }
-    public Node getRoot() {
+    public NonTerminalNode getRoot() {
         return root;
     }
-    public Set<Node> getTerminalNodes(){
+    public Set<TerminalNode> getTerminalNodes(){
         return terminalNodes;
     }
 
     public void setName(String name) {
         this.name = name;
     }
-    public void setRoot(Node root) {
+    public void setRoot(NonTerminalNode root) {
         this.root = root;
     }
-    public void setTerminalNodes(Set<Node> terminalNodes){
+    public void setTerminalNodes(Set<TerminalNode> terminalNodes){
         this.terminalNodes = terminalNodes;
     }
 }
