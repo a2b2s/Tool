@@ -1,7 +1,10 @@
 package decision_table;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class DecisionTable {
@@ -21,17 +24,6 @@ public class DecisionTable {
         Rule newRule = new Rule(ruleID);
         this.ruleList.add(newRule);
     }
-    /*public void addPairToRule(int ruleID, DecisionTableParts dtPart, Boolean aBoolean){
-        for (Rule r: ruleList){
-            if (r.getID() == ruleID){
-                r.addPair(new Pair(dtPart, aBoolean));
-            } else {
-                addRule(new Rule(ruleList.size()));
-                this.getRuleList().get(ruleList.size() - 1).addPair(new Pair(dtPart, aBoolean));
-            }
-            break;
-        }
-    }*/
     public void addPairToRule(int ruleID, Object value, Boolean aBoolean){
         if (ruleID < ruleList.size())
             ruleList.get(ruleID).addPair(new Pair(value, aBoolean));
@@ -41,8 +33,31 @@ public class DecisionTable {
             this.getRuleList().get(ruleID).addPair(new Pair(value, aBoolean));
         }
     }
+    @Deprecated
     public void complementOtherRules(int ruleID, Object value){
         ruleList.stream().filter(rl -> ruleID != rl.getID()).forEach(r -> r.addPair(value, false));
+    }
+    public void complementOtherRulesCondition(){
+        Set<Condition> conditionSet = ruleList
+                .stream().flatMap(t -> t.getConditionPairs().stream()).map(f -> (Condition)f.getValue())
+                .collect(Collectors.toCollection(HashSet::new));
+
+        for (Rule tempR : ruleList) {
+            List<Condition> conditions = tempR.getConditionPairs().stream().map(x -> (Condition) x.getValue()).collect(Collectors.toList());
+            conditionSet.stream().filter(Predicate.not(conditions::contains)).forEach(x -> tempR.addPair(x, false));
+            tempR.setConditionPairs(tempR.getConditionPairs().stream().sorted().collect(Collectors.toList()));
+        }
+    }
+    public void complementOtherRulesAction(){
+        Set<Action> actionSet = ruleList
+                .stream().flatMap(t -> t.getActionPairs().stream()).map(f -> (Action)f.getValue())
+                .collect(Collectors.toCollection(HashSet::new));
+
+        for (Rule tempR : ruleList) {
+            List<Action> actions = tempR.getActionPairs().stream().map(x -> (Action) x.getValue()).collect(Collectors.toList());
+            actionSet.stream().filter(Predicate.not(actions::contains)).forEach(x -> tempR.addPair(x, false));
+            tempR.setActionPairs(tempR.getActionPairs().stream().sorted().collect(Collectors.toList()));
+        }
     }
     public void addPairToRule(int ruleID, Pair pair){
         if (ruleID < ruleList.size())

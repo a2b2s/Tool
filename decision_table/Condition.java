@@ -37,6 +37,12 @@ public class Condition implements Comparable<Condition>{
         return false;
     }
     @Override
+    public int hashCode() {
+        int result = ID;
+        result = 31 * result + name.hashCode();
+        return result;
+    }
+    @Override
     public int compareTo(Condition condition) {
         return this.getID() - condition.getID();
     }

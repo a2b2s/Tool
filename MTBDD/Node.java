@@ -1,5 +1,11 @@
 package MTBDD;
 
+import decision_table.Action;
+import decision_table.Condition;
+
+/**
+ * {@link Node} is the basic unit in {@link MTBDD}
+ * */
 public class Node {
 
     private Object value;
@@ -13,11 +19,38 @@ public class Node {
         this.value = value;
     }
 
+    /**
+     * Creates a copy of the current {@link Node}.
+     * @return {@link Node}
+     * */
     public Node getClone() {
         Node node = new Node();
-        node.setValue(this.getValue());
+        node.setValue(value);
+        node.setIncomingEdge(incomingEdge);
 
         return node;
+    }
+    /**
+     * Checks whether this {@link Node} is terminal or not.
+     * @return {@code true} if it is a terminal {@link Node} <p>or</p> {@code false} if it is a non-terminal {@link Node}
+     * */
+    public boolean isTerminalNode(){
+        return leftChild == null && rightChild == null;
+    }
+    /**
+     * Checks whether this {@link Node} is root or not.
+     * @return {@code true} if it is a root {@link Node} <p>or</p> {@code false} if it is not a root {@link Node}
+     * */
+    public boolean isRootNode(){
+        return parent == null;
+    }
+    /**
+     * Gives a child {@link Node} based on the edge.
+     * @param b This parameter represents the edge of the current {@link Node}.
+     * @return {@linkplain #rightChild}, if b is {@code true} <p>or</p> {@linkplain #leftChild}, if b is {@code false}.
+     * */
+    public Node getChildByEdge(boolean b){
+        return b ? rightChild : leftChild;
     }
 
     public Object getValue(){
@@ -76,6 +109,6 @@ public class Node {
     }
     @Override
     public String toString(){
-        return value + "";
+        return value + "/" + incomingEdge;
     }
 }

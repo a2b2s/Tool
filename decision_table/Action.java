@@ -37,6 +37,12 @@ public class Action implements Comparable<Action>{
         return false;
     }
     @Override
+    public int hashCode() {
+        int result = ID;
+        result = 31 * result + name.hashCode();
+        return result;
+    }
+    @Override
     public int compareTo(Action action) {
         return this.getID() - action.getID();
     }
