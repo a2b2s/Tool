@@ -39,7 +39,6 @@ public class OrderedBinaryDecisionDiagram{
                 current = current.getLeftChildNode();
                 current.setIncomingEdge(false);
             }
-
             current.setParentNode(nodesSequence.get(nodesSequence.size()-1));
             nodesSequence.add(current);
         }
