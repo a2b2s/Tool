@@ -1,9 +1,6 @@
 package decision_table;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -78,7 +75,45 @@ public class DecisionTable {
             addRule(r);
         }
     }
+    /**
+     * Use this method before {@link DecisionTable#expandDT()} to be sure whether this {@link DecisionTable} needs expansion or not.
+     * @return {@code true} if {@link DecisionTable} has at least one "don't care".
+     * */
+    public boolean isDTShortened(){
+        return ruleList.stream().anyMatch(DecisionTable::isRuleShortened);
+    }
+    /**
+     * Checks current {@link Rule} for shortness.
+     * @param rule to be checked.
+     * @return {@code true} if this {@link Rule} has "don't care".
+     * */
+    public static boolean isRuleShortened(Rule rule){
+        return rule.getConditionPairs().stream().map(Pair::getaBoolean).anyMatch(Objects::isNull);
+    }
+    /**
+     * This method gets rid of "don't care" values in {@link Rule} if it is required.
+     * As a result a number of {@link Rule}s can drastically increase.
+     * */
+    public void expandDT() {
+        while (isDTShortened())
+            for (int i = 0; i < ruleList.size(); i++)
+                for (int j = 0; j < ruleList.get(i).getConditionPairs().size(); j++)
+                    if (ruleList.get(i).getConditionPairs().get(j).getaBoolean() == null) {
+                        ruleList.get(i).getConditionPairs().get(j).setaBoolean(false);
+                        ruleList.add(i + 1, ruleList.get(i).copyOfRule());
+                        ruleList.get(i + 1).getConditionPairs().get(j).setaBoolean(true);
+                    }
 
+        for (int i = 0; i < ruleList.size(); i++)
+            if (i != ruleList.get(i).getID())
+                ruleList.get(i).setID(i);
+    }
+    /**
+     * This method reduces the number of rules, basically by merging {@link Rule}s.
+     * */
+    public void shortenDT(){
+
+    }
     public DecisionTable copyOfDecisionTable(){
         DecisionTable copy = new DecisionTable(this.name);
 
@@ -114,14 +149,12 @@ public class DecisionTable {
     public void setName(String name){
         this.name = name;
     }
-
     public List<Rule> getRuleList(){
         return ruleList;
     }
     public void setRuleList(List<Rule> rules){
         ruleList = rules;
     }
-
     @Override
     public boolean equals(Object object) {
         if (this == object)
