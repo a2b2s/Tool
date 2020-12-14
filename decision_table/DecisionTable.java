@@ -128,6 +128,7 @@ public class DecisionTable {
         return copy;
     }
 
+    @Deprecated
     public List<Action> getWorkingActions(){
         List<Action> actions = new ArrayList<>();
 

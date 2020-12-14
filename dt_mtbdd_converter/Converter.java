@@ -21,11 +21,11 @@ public class Converter {
         MTBDDBuilder build = new MTBDDBuilder(mtbdd);
 
         for (int i = 0; i < decisionTable.getRuleList().size(); i++){
-            Rule tempRule = decisionTable.getRuleList().get(i); //Current Rule
+            Rule tempRule = decisionTable.getRuleList().get(i);
             List<Node> nonTerminalNodesChain = tempRule.getConditionPairs()
-                    .stream().map(c -> (Condition)c.getValue()).map(v -> new Node(v)).collect(Collectors.toCollection(ArrayList::new)); //Conditions for current Rule
+                    .stream().map(c -> (Condition)c.getValue()).map(v -> new Node(v)).collect(Collectors.toCollection(ArrayList::new));
             List<Boolean> edgesChain = tempRule.getConditionPairs()
-                    .stream().map(Pair::getaBoolean).collect(Collectors.toCollection(ArrayList::new)); //Boolean values of current rule's conditions
+                    .stream().map(Pair::getaBoolean).collect(Collectors.toCollection(ArrayList::new));
             Node terminalNode = tempRule.getActionPairs()
                     .stream().filter(Pair::getaBoolean).map(x -> new Node((Action)x.getValue())).findFirst().get();
 
@@ -42,7 +42,6 @@ public class Converter {
 
         return mtbdd;
     }
-
     /**
      * This method converts {@link MTBDD} into {@link DecisionTable}
      * @param mtbdd is a {@link MTBDD}.
