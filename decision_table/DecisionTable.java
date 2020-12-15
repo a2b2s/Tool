@@ -3,6 +3,7 @@ package decision_table;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class DecisionTable {
 
@@ -111,9 +112,53 @@ public class DecisionTable {
     /**
      * This method reduces the number of rules, basically by merging {@link Rule}s.
      * */
-    public void shortenDT(){
+    public Map<Action, List<Rule>> shortenDT(){
+        Map<Action, List<Rule>> map = Utility.combineRulesByAction(this);
 
+        for(Map.Entry<Action, List<Rule>> entry: map.entrySet()){
+            if (entry.getValue().size() > 1){
+                List<Rule> thisActionsRules = entry.getValue();
+                List<Rule> currentList = new ArrayList<>(thisActionsRules);
+                List<Rule> impossibleToMerge = new ArrayList<>();
+                List<Integer> timesUsed;
+
+                while(Utility.ruleListForMerging(currentList)){
+                    int currentSize = currentList.size();
+                    timesUsed = IntStream.of(new int[currentSize]).boxed().collect(Collectors.toList());
+
+                    for(int i = 0; i < currentSize; i++){
+                        Rule r1 = currentList.get(i);
+                        for (int j = i; j < currentSize; j++){
+                            Rule r2 = currentList.get(j);
+                            if (j != i){
+                                int pID = Utility.rulesCanMerge(r1, r2);
+                                if (pID != -1){
+                                    Rule mergedRule = r1.copyOfRule();
+                                    mergedRule.getConditionPairs().get(pID).setaBoolean(null);
+                                    currentList.add(mergedRule);
+                                    mergedRule.setID(currentList.size()-1);
+                                    timesUsed.set(i, timesUsed.get(i) + 1);
+                                    timesUsed.set(j, timesUsed.get(j) + 1);
+                                }//IF2//
+                            }//IF1//
+                        }//FOR2//
+                    }//FOR1//
+                    for (int u = 0; u < timesUsed.size(); u++)
+                        if (timesUsed.get(u) == 0)
+                            impossibleToMerge.add(currentList.get(u));
+                    IntStream.range(0, currentSize)
+                            .boxed()
+                            .sorted(Collections.reverseOrder()).forEach(q -> currentList.remove((int)q));
+                }//WHILE//
+                entry.setValue(impossibleToMerge);
+            }
+        }
+        return map;
     }
+    /**
+     * Creates a copy of this {@link DecisionTable}
+     * @return copy object of this Decision Table.
+     * */
     public DecisionTable copyOfDecisionTable(){
         DecisionTable copy = new DecisionTable(this.name);
 

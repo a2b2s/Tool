@@ -49,22 +49,41 @@ public class Utility {
      * Checks two {@link Rule}s for the possibility of merging.
      * @param r1 first rule
      * @param r2 first rule
-     * @return {@code true} if there is only <b>one</b> or <b>zero</b> pair of {@link Pair}s with distinguishing boolean values.
-     * */
-    public static boolean rulesCanMerge(Rule r1, Rule r2){
+     * @return {@code -1} if there is no pair of {@link Pair}s with distinguishing boolean values or any {@code int} which represents ID of Pairs.
+     **/
+    public static int rulesCanMerge(Rule r1, Rule r2){
         int counter = 0;
+        int ID = 0;
 
         int i = 0;
         while (i < r1.getConditionPairs().size() && counter < 2){
             Boolean b1 = r1.getConditionPairs().get(i).getaBoolean();
             Boolean b2 = r2.getConditionPairs().get(i).getaBoolean();
-            if (booleansCanMerge(b1, b2))
+            if (booleansCanMerge(b1, b2)) {
+                ID = i;
                 counter++;
-
+            }
             i++;
         }
 
-        return counter < 2;
+        if (counter == 1)
+            return ID;
+        else
+            return -1;
+    }
+    /**
+     * Checks whether given {@link Rule}s can be merged.
+     * */
+    public static boolean ruleListForMerging(List<Rule> rList){
+        for (int i = 0; i < rList.size(); i++)
+            for (int j = i; j < rList.size(); j++)
+                if (j != i){
+                    int pID = rulesCanMerge(rList.get(i), rList.get(j));
+                    if (pID != -1)
+                        return true;
+                }
+
+        return false;
     }
     /**
      * Combines {@link Rule}s with the same {@link Action}s.
