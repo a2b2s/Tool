@@ -35,7 +35,7 @@ public class Pair implements Comparable<Pair>{
             return false;
         if (object instanceof Pair){
             Pair pair = (Pair)object;
-            return (value.equals(pair.getValue()) && new Utility().compareTwoBooleans(aBoolean, pair.getaBoolean()));
+            return (value.equals(pair.getValue()) && Utility.compareTwoBooleans(aBoolean, pair.getaBoolean()));
         }
 
         return false;

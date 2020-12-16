@@ -1,6 +1,7 @@
 package decision_table;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -112,7 +113,60 @@ public class DecisionTable {
     /**
      * This method reduces the number of rules, basically by merging {@link Rule}s.
      * */
-    public Map<Action, List<Rule>> shortenDT(){
+    public void shortenDT(){
+        Map<Action, List<Rule>> map = Utility.combineRulesByAction(this);
+
+        for(Map.Entry<Action, List<Rule>> entry: map.entrySet()){
+            if (entry.getValue().size() > 1){
+                List<Rule> thisActionsRules = entry.getValue();
+                List<Rule> currentList = new ArrayList<>(thisActionsRules);
+                List<Rule> intermediateRules = new ArrayList<>();
+                List<Rule> impossibleToMerge = new ArrayList<>();
+                List<Integer> timesUsed;
+
+                while(Utility.ruleListForMerging(currentList)){
+                    int currentSize = currentList.size();
+                    timesUsed = IntStream.of(new int[currentSize]).boxed().collect(Collectors.toList());
+
+                    for(int i = 0; i < currentSize; i++){
+                        Rule r1 = currentList.get(i);
+                        for (int j = i; j < currentSize; j++){
+                            Rule r2 = currentList.get(j);
+                            if (j != i){
+                                int pID = Utility.rulesCanMerge(r1, r2);
+                                if (pID != -1){
+                                    Rule mergedRule = r1.copyOfRule();
+                                    mergedRule.getConditionPairs().get(pID).setaBoolean(null);
+                                    intermediateRules.add(mergedRule);
+                                    //currentList.add(mergedRule);
+                                    timesUsed.set(i, timesUsed.get(i) + 1);
+                                    timesUsed.set(j, timesUsed.get(j) + 1);
+                                }
+                            }
+                        }
+                    }
+                    for (int u = 0; u < timesUsed.size(); u++)
+                        if (timesUsed.get(u) == 0)
+                            impossibleToMerge.add(currentList.get(u));
+                    currentList.clear();
+                    currentList.addAll(intermediateRules);
+                    intermediateRules.clear();
+                }
+                if (!currentList.isEmpty() && currentList.size() > 1) {
+                    for (int i = 0; i < currentList.size(); i++)
+                        for (int j = 0; j < currentList.size(); j++)
+                            if (j != i)
+                                if (currentList.get(i).equals(currentList.get(j)))
+                                    currentList.remove((int)j);
+                    impossibleToMerge.addAll(currentList);
+                }
+                entry.setValue(impossibleToMerge);
+            }
+        }
+
+        ruleList = map.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
+    }
+    /*public void shortenDT(){
         Map<Action, List<Rule>> map = Utility.combineRulesByAction(this);
 
         for(Map.Entry<Action, List<Rule>> entry: map.entrySet()){
@@ -136,25 +190,31 @@ public class DecisionTable {
                                     Rule mergedRule = r1.copyOfRule();
                                     mergedRule.getConditionPairs().get(pID).setaBoolean(null);
                                     currentList.add(mergedRule);
-                                    mergedRule.setID(currentList.size()-1);
                                     timesUsed.set(i, timesUsed.get(i) + 1);
                                     timesUsed.set(j, timesUsed.get(j) + 1);
-                                }//IF2//
-                            }//IF1//
-                        }//FOR2//
-                    }//FOR1//
+                                }
+                            }
+                        }
+                    }
                     for (int u = 0; u < timesUsed.size(); u++)
                         if (timesUsed.get(u) == 0)
                             impossibleToMerge.add(currentList.get(u));
-                    IntStream.range(0, currentSize)
-                            .boxed()
-                            .sorted(Collections.reverseOrder()).forEach(q -> currentList.remove((int)q));
-                }//WHILE//
+                    currentList.subList(0, currentSize).clear();
+                }
+                if (!currentList.isEmpty() && currentList.size() > 1) {
+                    for (int i = 0; i < currentList.size(); i++)
+                        for (int j = 0; j < currentList.size(); j++)
+                            if (j != i)
+                                if (currentList.get(i).equals(currentList.get(j)))
+                                    currentList.remove((int)j);
+                    impossibleToMerge.addAll(currentList);
+                }
                 entry.setValue(impossibleToMerge);
             }
         }
-        return map;
-    }
+
+        ruleList = map.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
+    }*/
     /**
      * Creates a copy of this {@link DecisionTable}
      * @return copy object of this Decision Table.

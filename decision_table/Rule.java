@@ -53,14 +53,12 @@ public class Rule {
         return this.getActionPairs().equals(rule.getActionPairs());
     }
     public boolean compareConditionPairs(Rule rule){
-        Utility u = new Utility();
-
         int count = 0;
 
         if (this.compareActionPairs(rule)){
             for (int i = 0; i < this.getConditionPairs().size(); i++){
                 if (conditionPairs.get(i).getValue().equals(rule.getConditionPairs().get(i).getValue())) {
-                    if (!u.compareTwoBooleans(conditionPairs.get(i).getaBoolean(), rule.getConditionPairs().get(i).getaBoolean()))
+                    if (!Utility.compareTwoBooleans(conditionPairs.get(i).getaBoolean(), rule.getConditionPairs().get(i).getaBoolean()))
                         count++;
                 }
                 if (count > 1)
