@@ -1,7 +1,6 @@
 package decision_table;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -111,17 +110,60 @@ public class DecisionTable {
                 ruleList.get(i).setID(i);
     }
     /**
-     * This method reduces the number of rules, basically by merging {@link Rule}s.
+     * Reduces the number of rules, basically by merging {@link Rule}s.
      * */
-    public void shortenDT_v1(){
+    public void shortenDT(){
         Map<Action, List<Rule>> map = Utility.combineRulesByAction(this);
 
         for(Map.Entry<Action, List<Rule>> entry: map.entrySet()){
-            if (entry.getValue().size() > 1){
+            if (entry.getValue().size() > 1) {
+                Map<Integer, Map<Set<Integer>, Rule>> ruleGrouping = new HashMap<>();
+                Map<Integer, Map<Set<Integer>, Rule>> memory = new HashMap<>();
+                Map<Integer, Set<Set<Integer>>> usedRules = new HashMap<>();
+                Utility.multipleCountTrues(entry.getValue(), ruleGrouping);
 
+                entry.getValue().clear();
+
+                while (true){
+                    List<Integer> truesNumber = new ArrayList<>(ruleGrouping.keySet());
+                    for (int i = 0; i < truesNumber.size() - 1; i++) {
+                        Map<Set<Integer>, Rule> previousGroup = ruleGrouping.get(truesNumber.get(i));
+                        Map<Set<Integer>, Rule> nextGroup = ruleGrouping.get(truesNumber.get(i + 1));
+
+                        for (Map.Entry<Set<Integer>, Rule> entryPrevious : previousGroup.entrySet())
+                            for (Map.Entry<Set<Integer>, Rule> entryNext : nextGroup.entrySet()) {
+                                Set<Integer> newIndices = Utility.newIndicesCombination(entryPrevious.getKey(), entryNext.getKey());
+                                int pID = Utility.rulesCanMerge(entryPrevious.getValue(), entryNext.getValue());
+                                if (pID != -1) {
+                                    Rule newRule = Utility.merge2Rules(entryPrevious.getValue(), pID);
+                                    Utility.rememberUsedRules(truesNumber.get(i), entryPrevious.getKey(), usedRules);
+                                    Utility.rememberUsedRules(truesNumber.get(i + 1), entryNext.getKey(), usedRules);
+                                    if (memory.containsKey(i))
+                                        memory.get(i).put(newIndices, newRule);
+                                    else {
+                                        memory.put(i, new HashMap<>());
+                                        memory.get(i).put(newIndices, newRule);
+                                    }
+                                }
+                            }
+                    }
+
+                    if (!memory.isEmpty()) {
+                        List<Rule> temp = Utility.extractUnusedItems(ruleGrouping, usedRules);
+                        usedRules.clear();
+                        if (!temp.isEmpty())
+                            entry.getValue().addAll(temp);
+                        ruleGrouping.clear();
+                        ruleGrouping.putAll(memory);
+                        memory.clear();
+                    } else
+                        break;
+                }
+                entry.getValue().addAll(ruleGrouping.entrySet().stream().flatMap(k -> k.getValue().values().stream()).collect(Collectors.toList()));
             }
         }
         ruleList = map.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
+        IntStream.range(0, ruleList.size()).boxed().forEach(i -> ruleList.get(i).setID(i));
     }
     /**
      * Creates a copy of this {@link DecisionTable}
