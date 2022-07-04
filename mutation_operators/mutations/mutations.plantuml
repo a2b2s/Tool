@@ -1,0 +1,31 @@
+@startuml
+
+    namespace mutation_operators {
+      namespace mutations {
+        class mutation_operators.mutations.ModelMutator {
+            - allModelMutants : List<EventSequenceGraph>
+            - modelDTActionInsertion : List<EventSequenceGraph>
+            - modelDTActionOmission : List<EventSequenceGraph>
+            - modelDTRuleInsertion : List<EventSequenceGraph>
+            - modelDTRuleOmission : List<EventSequenceGraph>
+            - modelOBDDNodeInsertion : List<EventSequenceGraph>
+            - modelOBDDNodeOmission : List<EventSequenceGraph>
+            + getAllModelMutants()
+            + getModelDTActionInsertion()
+            + getModelDTActionOmission()
+            + getModelDTRuleInsertion()
+            + getModelDTRuleOmission()
+            + getModelOBDDNodeInsertion()
+            + getModelOBDDNodeOmission()
+            {static} + main()
+            + mutateESGByActionInsertion()
+            + mutateESGByActionOmission()
+            + mutateESGByNodeInsertion()
+            + mutateESGByNodeOmission()
+            + mutateESGByRuleInsertion()
+            + mutateESGByRuleOmission()
+        }
+      }
+    }
+
+@enduml

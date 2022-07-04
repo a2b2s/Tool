@@ -23,8 +23,7 @@ public class Condition implements Comparable<Condition>{
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object object) {
+    @Override public boolean equals(Object object) {
         if (object == this)
             return true;
         if (object == null)
@@ -33,21 +32,17 @@ public class Condition implements Comparable<Condition>{
             Condition condition = (Condition)object;
             return (this.getID() == condition.getID()) && (this.getName().equalsIgnoreCase(condition.getName()));
         }
-
         return false;
     }
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         int result = ID;
         result = 31 * result + name.hashCode();
         return result;
     }
-    @Override
-    public int compareTo(Condition condition) {
+    @Override public int compareTo(Condition condition) {
         return this.getID() - condition.getID();
     }
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return this.getClass().getSimpleName().charAt(0) + "[" + ID + "] " + name;
     }
 }

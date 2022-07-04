@@ -27,8 +27,7 @@ public class Pair implements Comparable<Pair>{
         return new Pair(value, aBoolean);
     }
 
-    @Override
-    public boolean equals(Object object) {
+    @Override public boolean equals(Object object) {
         if (this == object)
             return true;
         if (object == null)
@@ -37,20 +36,16 @@ public class Pair implements Comparable<Pair>{
             Pair pair = (Pair)object;
             return (value.equals(pair.getValue()) && Utility.compareTwoBooleans(aBoolean, pair.getaBoolean()));
         }
-
         return false;
     }
-    @Override
-    public int compareTo(Pair pair) {
+    @Override public int compareTo(Pair pair) {
         if (pair.getValue() instanceof Action)
             return ((Action)this.getValue()).compareTo((Action) pair.getValue());
         else if (pair.getValue() instanceof Condition)
             return ((Condition)this.getValue()).compareTo((Condition) pair.getValue());
-
         return 0;
     }
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return value + ": " + aBoolean;
     }
 }

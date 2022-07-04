@@ -67,7 +67,6 @@ public class Rule {
         }
         else
             return false;
-
         return true;
     }
     public Rule copyOfRule(){
@@ -81,8 +80,7 @@ public class Rule {
         return clonedRule;
     }
 
-    @Override
-    public boolean equals(Object object) {
+    @Override public boolean equals(Object object) {
         if (this == object)
             return true;
         if (object == null)
@@ -91,11 +89,9 @@ public class Rule {
             Rule rule = (Rule) object;
             return (compareConditionPairs(rule));
         }
-
         return false;
     }
-    @Override
-    public String toString(){
+    @Override public String toString(){
         return "R" + ID + ": " + conditionPairs.toString() + actionPairs.toString() + "\n";
     }
 }

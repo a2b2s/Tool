@@ -17,7 +17,6 @@ public class MTBDDBuilder {
     public MTBDDBuilder(MTBDD mtbdd){
         this.mtbdd = mtbdd;
     }
-
     /**
      * Use this method if {@link MTBDD} does not have a root node.
      * @param rootNode pass a new node to add first node to the {@link MTBDD}.
@@ -26,7 +25,6 @@ public class MTBDDBuilder {
         mtbdd.setRoot(rootNode);
         currentNode = mtbdd.getRoot();
     }
-
     /**
      * This method adds a new non-terminal node by connecting it to the existing non-terminal node by certain edge.
      * @param parentNode is an existing non-terminal node.
@@ -66,7 +64,6 @@ public class MTBDDBuilder {
         else
             parentNonterminalNode.setLeftChild(terminalNode);
     }
-
     /**
      * Detaches one child node from parent node by child's incoming edge.
      * @param parent {@link Node} which needed to get rid of child {@link Node}
@@ -94,7 +91,6 @@ public class MTBDDBuilder {
             mtbdd.getTerminalIncomingEdges().remove(terminalNode);
         }
     }
-
     /**
      * This method is a core of {@link MTBDD#getCopy()}. It passes a copy of a given {@link MTBDD}.
      * @return a copy of a given {@link MTBDD}.

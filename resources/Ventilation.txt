@@ -1,7 +1,7 @@
-Button Pressed?;      TTFFFF
-Ventilation OFF?;     TFFFTT
-Ventilation ON?;      FTFTFT
+C0; TTFFFF
+C1; TFFFTT
+C2; FTFTFT
 ------------Actions------------
-Start ventilation;    100000
-Stop ventilation;     010000
-No action;            001111
+A0; 100000
+A1; 010000
+A2; 001111

@@ -1,8 +1,5 @@
 package MTBDD;
 
-import decision_table.Action;
-import decision_table.Condition;
-
 /**
  * {@link Node} is the basic unit in {@link MTBDD}
  * */
@@ -18,7 +15,6 @@ public class Node {
     public Node(Object value){
         this.value = value;
     }
-
     /**
      * Creates a copy of the current {@link Node}.
      * @return {@link Node}

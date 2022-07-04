@@ -31,8 +31,7 @@ public class DecisionTable {
             this.getRuleList().get(ruleID).addPair(new Pair(value, aBoolean));
         }
     }
-    @Deprecated
-    public void complementOtherRules(int ruleID, Object value){
+    @Deprecated public void complementOtherRules(int ruleID, Object value){
         ruleList.stream().filter(rl -> ruleID != rl.getID()).forEach(r -> r.addPair(value, false));
     }
     public void complementOtherRulesCondition(){
@@ -183,8 +182,7 @@ public class DecisionTable {
         return copy;
     }
 
-    @Deprecated
-    public List<Action> getWorkingActions(){
+    @Deprecated public List<Action> getWorkingActions(){
         List<Action> actions = new ArrayList<>();
 
         for (Rule r: ruleList){
@@ -211,8 +209,7 @@ public class DecisionTable {
     public void setRuleList(List<Rule> rules){
         ruleList = rules;
     }
-    @Override
-    public boolean equals(Object object) {
+    @Override public boolean equals(Object object) {
         if (this == object)
             return true;
         if (object == null)
@@ -242,8 +239,7 @@ public class DecisionTable {
         }
         return false;
     }
-    @Override
-    public String toString(){
+    @Override public String toString(){
         return this.name + "\n" + ruleList;
     }
 }

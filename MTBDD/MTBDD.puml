@@ -1,0 +1,35 @@
+@startuml
+
+title __MTBDD's Class Diagram__\n
+
+      class MTBDD {
+          - name : String
+          - terminalIncomingEdges : Map<Node, List<Boolean>>
+          - terminalNodes : Map<Node, List<Node>>
+          + MTBDD()
+          + MTBDD()
+          + getCopy()
+          + getName()
+          + getRoot()
+          + getTerminalIncomingEdges()
+          + getTerminalNodes()
+          + setName()
+          + setRoot()
+          + setTerminalIncomingEdges()
+          + setTerminalNodes()
+          + toString()
+          - height()
+          - printGivenLevel()
+          - printLevelOrder()
+      }
+
+  MTBDD o-- Node : root
+  MTBDDBuilder o-- Node : currentNode
+  MTBDDBuilder o-- MTBDD : mtbdd
+  Node o-- Node : leftChild
+  Node o-- Node : parent
+  Node o-- Node : rightChild
+
+
+
+@enduml

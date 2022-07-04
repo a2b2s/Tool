@@ -91,16 +91,10 @@ public class DTFileReader {
     }
 
     private List<Pair> conditionPairs(int ID, String[] set){
-        Utility sw = new Utility();
-        String[] values = sw.stringToArray(set[1]);
-
-        return List.of(values).stream().map(o -> new Pair(new Condition(ID, set[0]), sw.stringToBoolean(o))).collect(Collectors.toList());
+        return List.of(set[1].split("")).stream().map(o -> new Pair(new Condition(ID, set[0]), Utility.stringToBoolean(o))).collect(Collectors.toList());
     }
     private List<Pair> actionPairs(int ID, String[] set){
-        Utility sw = new Utility();
-        String[] values = sw.stringToArray(set[1]);
-
-        return List.of(values).stream().map(o -> new Pair(new Action(ID, set[0]), sw.stringToBoolean(o))).collect(Collectors.toList());
+        return List.of(set[1].split("")).stream().map(o -> new Pair(new Action(ID, set[0]), Utility.stringToBoolean(o))).collect(Collectors.toList());
     }
 
     public void setPath(String path){

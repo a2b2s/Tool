@@ -23,8 +23,7 @@ public class Action implements Comparable<Action>{
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object object) {
+    @Override public boolean equals(Object object) {
         if (object == this)
             return true;
         if (object == null)
@@ -33,21 +32,17 @@ public class Action implements Comparable<Action>{
             Action action = (Action)object;
             return (this.getID() == action.getID()) && (this.getName().equalsIgnoreCase(action.getName()));
         }
-
         return false;
     }
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         int result = ID;
         result = 31 * result + name.hashCode();
         return result;
     }
-    @Override
-    public int compareTo(Action action) {
+    @Override public int compareTo(Action action) {
         return this.getID() - action.getID();
     }
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return this.getClass().getSimpleName().charAt(0) + "[" + ID + "] " + name;
     }
 }

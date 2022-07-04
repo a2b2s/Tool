@@ -1,0 +1,35 @@
+@startuml
+
+title __MTBDD's Class Diagram__\n
+
+  class Node {
+        - incomingEdge : boolean
+        - value : Object
+        + Node()
+        + Node()
+        + equals()
+        + getChildByEdge()
+        + getClone()
+        + getIncomingEdge()
+        + getLeftChild()
+        + getParent()
+        + getRightChild()
+        + getValue()
+        + hashCode()
+        + isRootNode()
+        + isTerminalNode()
+        + setIncomingEdge()
+        + setLeftChild()
+        + setParent()
+        + setRightChild()
+        + setValue()
+        + toString()
+  }
+
+  Node o-- Node : leftChild
+  Node o-- Node : parent
+  Node o-- Node : rightChild
+
+
+
+@enduml

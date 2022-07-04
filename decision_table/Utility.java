@@ -4,8 +4,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utility {
-
-    public Boolean stringToBoolean(String value){
+    /**
+     * Converts single {@link String} value into corresponding {@link Boolean} value.
+     * */
+    public static Boolean stringToBoolean(String value){
         if (value.matches("[tTyY1]"))
             return true;
         else if (value.matches("[fFnN0]"))
@@ -13,16 +15,10 @@ public class Utility {
         else
             return null;
     }
-
-    public String[] stringToArray(String string){
-        String[] arr = new String[string.length()];
-
-        for (int i = 0; i < arr.length; i++)
-            arr[i] = string.substring(i, i+1);
-
-        return arr;
-    }
-
+    /**
+     * Compares two values of two {@link Pair}s.
+     * @return <b>true</b> if one of the values is null, i.e. "don't care", or both values are true, false or null.
+     * */
     public static boolean compareTwoBooleans(Boolean b1, Boolean b2){
         if (b1 == null || b2 == null)
             return true;
@@ -61,7 +57,6 @@ public class Utility {
             }
             i++;
         }
-
         if (counter == 1)
             return ID;
         else
@@ -84,7 +79,6 @@ public class Utility {
                 groupedRules.get(a).add(r);
             }
         }
-
         return groupedRules;
     }
     /**
@@ -111,7 +105,6 @@ public class Utility {
             if (p.getaBoolean() != null)
                 if (p.getaBoolean())
                     truesNumber++;
-
        return truesNumber;
     }
     /**
@@ -163,7 +156,6 @@ public class Utility {
     public static <T> Set<T> newIndicesCombination(Set<T> s1, Set<T> s2){
         Set<T> set = new HashSet<>(s1);
         set.addAll(s2);
-
         return set;
     }
     /**
